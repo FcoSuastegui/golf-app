@@ -14,7 +14,6 @@ class Routes {
     ),
     GetPage(
       name: PrincipalPage.routeName,
-      transition: Transition.cupertino,
       page: () => PrincipalPage(),
     ),
   ];

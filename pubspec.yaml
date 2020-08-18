@@ -38,6 +38,7 @@ dependencies:
   flutter_form_bloc: ^0.13.0
 
   get: ^3.4.4
+  google_fonts: ^1.1.0
 
 dev_dependencies:
   flutter_test:

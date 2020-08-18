@@ -1,562 +1,181 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:clubgolf/src/widgets/Loading/loading.dart';
-import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:clubgolf/src/blocs/register_bloc.dart';
-import 'package:clubgolf/src/helpers/colors.dart';
+import 'package:clubgolf/src/helpers/formatters.dart';
+import 'package:clubgolf/src/widgets/Buttons/button_submit_bloc.dart';
+import 'package:clubgolf/src/widgets/Footers/footer_logo.dart';
+import 'package:clubgolf/src/widgets/TextInput/text_input_field_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends StatelessWidget {
   static final routeName = 'register';
-  @override
-  _RegisterPageState createState() => _RegisterPageState();
-}
 
-class _RegisterPageState extends State<RegisterPage> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Registro"),
-        leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () => Get.back()),
-        backgroundColor: CustomColors.backColor,
-      ),
-      body: BlocProvider(
-        create: (context) => RegisterBloc(),
-        child: Builder(
-          builder: (context) {
-            final registerBloc = BlocProvider.of<RegisterBloc>(context);
-            return FormBlocListener<RegisterBloc, String, String>(
-              onSubmitting: (context, state) => LoadingDialog.show(context),
-              onSuccess: (context, state) async {
-                LoadingDialog.hide(context);
-                  //registerBloc.close();
-              },
-              onFailure: (context, state) async {
-                LoadingDialog.hide(context);
-              },
-              child: StepperFormBlocBuilder<RegisterBloc>(
-                type: StepperType.horizontal,
-                controlsBuilder: (BuildContext context, VoidCallback onStepContinue, VoidCallback onStepCancel, int step, FormBloc formBloc) {
-                  return Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        FlatButton(
-                          onPressed: onStepCancel,
-                          child: const Text('REGRESAR'),
-                        ),
-                        FlatButton(
-                          onPressed: onStepContinue,
-                          child: const Text('CONTINUAR'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                physics: ScrollPhysics(),
-                stepsBuilder: (formBloc) {
-                   return [
-                     _accountStep(registerBloc),
-                     _confimation(registerBloc),
-                     _finish(registerBloc),
-                   ];
-                } 
-              )
-            );
-          }
-        )
-      )
-    );
-  }
-
-  FormBlocStep _accountStep(RegisterBloc registerBloc) {
-    return FormBlocStep(
-      title: Text('Datos generales', style: TextStyle(fontSize: 10.0),),
-      state: registerBloc.state.isFirstStep ? StepState.editing : StepState.complete,
-      content: Column(
-        children: <Widget>[
-          StreamBuilder(
-            stream: registerBloc.radioButtonStream,
-            initialData: true,
-            builder: (BuildContext context, AsyncSnapshot snapshot){
-              return Row(
-                children: <Widget>[
-                  Radio(
-                    value: true,
-                    groupValue: snapshot.data,
-                    activeColor: CustomColors.primaryColor,
-                    onChanged: (val) => registerBloc.changeValue(val)
-                  ),
-                  Text("Soy un socio"),
-                  Radio(
-                    value: false,
-                    groupValue: snapshot.data,
-                    activeColor: CustomColors.primaryColor,
-                    onChanged: (val) =>  registerBloc.changeValue(val)
-                  ),
-                  Text("Soy un visitante"),
-                ],
-              );
-            },
-          ),          
-          StreamBuilder(
-            stream: registerBloc.radioButtonStream,
-            initialData: true,
-            builder: (BuildContext context, AsyncSnapshot snapshot) => 
-                _textFields(snapshot.data, registerBloc)
-          )
-        ]
-      )
-    );
-  }
-
-  FormBlocStep _confimation(RegisterBloc registerBloc) {
-    return FormBlocStep(
-      title: Text('Confirmación',style: TextStyle(fontSize: 10.0),),
-      state: registerBloc.state.isLastStep ? StepState.editing : StepState.complete,
-      content: Column(
-        children: <Widget>[
-          Icon(Icons.error, size: 60.0, color: CustomColors.primaryColor,),
-          SizedBox(height: 10.0,),
-          Text("CONFIRMACIÓN", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-          SizedBox(height: 10.0,),
-          Text(
-            "Gracias por ingresar tus datos,",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-              color: Colors.black54
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "validaremos tu número de",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-              color: Colors.black54
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "mebresía y te enviaremos tus",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-              color: Colors.black54
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "accesos por SMS al número que nos",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-              color: Colors.black54
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "proporcionaste.",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-              color: Colors.black54
-            ),
-            textAlign: TextAlign.center,
-          ),
-
-          SizedBox(height: 20.0,),
-
-          _columns(registerBloc)
-
-        ]
-      )
-    );
-  }
-
-
-  FormBlocStep _finish(RegisterBloc registerBloc) {
-    return FormBlocStep(
-      title: Text('Terminar',style: TextStyle(fontSize: 10.0),),
-      state: registerBloc.state.isLastStep ? StepState.editing : StepState.complete,
-      content: Column(
-        children: <Widget>[
-          Icon(Icons.error, size: 60.0, color: CustomColors.primaryColor,),
-          SizedBox(height: 10.0,),
-          Text("CONFIRMACIÓN", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-          SizedBox(height: 10.0,),
-          Text(
-            "Gracias por ingresar tus datos,",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-              color: Colors.black54
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "validaremos tu número de",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-              color: Colors.black54
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "mebresía y te enviaremos tus",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-              color: Colors.black54
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "accesos por SMS al número que nos",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-              color: Colors.black54
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "proporcionaste.",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-              color: Colors.black54
-            ),
-            textAlign: TextAlign.center,
-          ),
-
-          SizedBox(height: 20.0,),
-
-          _columns(registerBloc)
-
-        ]
-      )
-    );
-  }
-
-
-
-  Widget _textFields( bool data, RegisterBloc registerBloc) {
-    print(data);
-    return Column(
-      children: <Widget>[
-        Visibility(
-          child: Container(
-            padding: EdgeInsets.all(0),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: CustomColors.borderColor))
-            ),
-            child: TextFieldBlocBuilder(
-              textFieldBloc: registerBloc.numeroMebresia,
-              textInputAction: TextInputAction.next,
-              onSubmitted: (_) => FocusScope.of(context).nextFocus(),
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                labelText: 'Número de membresía',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: InputBorder.none
-                
-              ),
-            ),
-          ),
-          visible: data ? true : false
-        ),
-        Visibility(
-          child: Container(
-            padding: EdgeInsets.all(0),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: CustomColors.borderColor))
-            ),
-            child: TextFieldBlocBuilder(
-              textFieldBloc: registerBloc.nombres,
-              textInputAction: TextInputAction.next,
-              onSubmitted: (_) => FocusScope.of(context).nextFocus(),
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                labelText: 'Nombre(s)',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: InputBorder.none
-              ),
-            ),
-          ),
-          visible: true
-        ),
-        Visibility(
-          child: Container(
-            padding: EdgeInsets.all(0),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: CustomColors.borderColor))
-            ),
-            child: TextFieldBlocBuilder(
-              textFieldBloc: registerBloc.apellidos,
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.done,
-              onSubmitted: (_) => FocusScope.of(context).unfocus(),
-              decoration: InputDecoration(
-                labelText: 'Apellidos',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: InputBorder.none
-              ),
-            ),
-          ),
-          visible: data ? true : false
-        ),
-        Visibility(
-          child: Container(
-            padding: EdgeInsets.all(0),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: CustomColors.borderColor))
-            ),
-            child: TextFieldBlocBuilder(
-              textFieldBloc: registerBloc.primerApellido,
-              onSubmitted: (_) => FocusScope.of(context).nextFocus(),
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-              decoration: InputDecoration(
-                labelText: 'Primer apellido',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: InputBorder.none
-              ),
-            ),
-          ),
-          visible: !data ? true : false
-        ),
-        Visibility(
-          child: Container(
-            padding: EdgeInsets.all(0),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: CustomColors.borderColor))
-            ),
-            child: TextFieldBlocBuilder(
-              textFieldBloc: registerBloc.segundoApellido,
-              textInputAction: TextInputAction.next,
-              onSubmitted: (_) => FocusScope.of(context).nextFocus(),
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                labelText: 'Segundo apellido',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: InputBorder.none
-              ),
-            ),
-          ),
-          visible: !data ? true : false
-        ),
-        Visibility(
-          child: Container(
-            padding: EdgeInsets.all(0),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: CustomColors.borderColor))
-            ),
-            child: TextFieldBlocBuilder(
-              textFieldBloc: registerBloc.correo,
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              onSubmitted: (_) => FocusScope.of(context).nextFocus(),
-              decoration: InputDecoration(
-                labelText: 'Correo electrónico',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: InputBorder.none
-              ),
-            ),
-          ),
-          visible: !data ? true : false
-        ),
-        Visibility(
-          child: Container(
-            padding: EdgeInsets.all(0),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: CustomColors.borderColor))
-            ),
-            child: TextFieldBlocBuilder(
-              textFieldBloc: registerBloc.celular,
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              onSubmitted: (_) => FocusScope.of(context).nextFocus(),
-              decoration: InputDecoration(
-                labelText: 'Número de celular',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: InputBorder.none
-              ),
-            ),
-          ),
-          visible: !data ? true : false
-        )
-          
-      ],
-    );
-  }
-
-  Widget _columns( RegisterBloc registerBloc ) {
-    print("Data : ${registerBloc.isSocio}");
-    return registerBloc.isSocio ? 
-        Column(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: 25.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-              Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text("Membresía: ",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Colors.black54
-                  ),
-                ),
-                Text("${registerBloc.numeroMebresia.value.toUpperCase() }",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Colors.black54
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+            GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Stack(
                 children: <Widget>[
-                  Text("Nombre(s): ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.black54
+                  Container(
+                    margin: EdgeInsets.only(top: 0.0),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.26,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/banner-login.jpg"),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        colors: [
+                          Colors.teal[800],
+                          Colors.teal[200],
+                        ],
+                      ),
                     ),
                   ),
-                  Text("${registerBloc.nombres.value.toUpperCase()}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.black54
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.only(
+                      top: 210.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: BlocProvider(
+                        create: (context) => RegisterBloc(),
+                        child: Builder(
+                          builder: (context) {
+                            final register = context.bloc<RegisterBloc>();
+                            return FormBlocListener<RegisterBloc, String,
+                                String>(
+                              onSubmitting: (context, state) {},
+                              onSuccess: (context, state) {},
+                              onFailure: (context, state) {
+                                register?.close();
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: <Widget>[
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "CREA UNA NUEVA CUENTA",
+                                      style: GoogleFonts.quicksand(),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  TextInputFieldBloc(
+                                    textFieldBloc: register.nombre,
+                                    labelText: "Nombre(s)",
+                                    onSubmitted: (_) =>
+                                        FocusScope.of(context).nextFocus(),
+                                  ),
+                                  TextInputFieldBloc(
+                                    textFieldBloc: register.primerAp,
+                                    labelText: "Primer apellido",
+                                    onSubmitted: (_) =>
+                                        FocusScope.of(context).nextFocus(),
+                                  ),
+                                  TextInputFieldBloc(
+                                    textFieldBloc: register.segundoAp,
+                                    labelText: "Segundo apellido",
+                                    onSubmitted: (_) =>
+                                        FocusScope.of(context).nextFocus(),
+                                  ),
+                                  TextInputFieldBloc(
+                                    textFieldBloc: register.correo,
+                                    labelText: "Correo electrónico",
+                                    onSubmitted: (_) =>
+                                        FocusScope.of(context).nextFocus(),
+                                  ),
+                                  TextInputFieldBloc(
+                                    textFieldBloc: register.numero,
+                                    labelText: "Número de celular",
+                                    onSubmitted: (_) =>
+                                        FocusScope.of(context).unfocus(),
+                                    inputFormatters: [
+                                      MaskedTextInputFormatter(
+                                        mask: 'xxx xxxx xxx',
+                                        separator: ' ',
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                      top: 10.0,
+                                      left: 5.0,
+                                      right: 5.0,
+                                    ),
+                                    child: Text(
+                                      "* Se te enviará un SMS con tu contraseña para acceder a la aplicación.",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30.0,
+                                  ),
+                                  ButtonSubmitBloc(
+                                    submit: register.submit,
+                                    text: "ACEPTAR",
+                                  ),
+                                  SizedBox(
+                                    height: 40,
+                                  ),
+                                  FooterLogo(
+                                    textPrincipal: 'Ya tengo una cuenta',
+                                    textSecondary: '¡Iniciar sesión!',
+                                    router: () => Get.back(),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text("Apellidos: ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.black54
-                    ),
-                  ),
-                  Text("${registerBloc.apellidos.value.toUpperCase()}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.black54
+                  Positioned(
+                    left: 10.0,
+                    top: 40.0,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                      onPressed: () => Get.back(),
                     ),
                   ),
                 ],
               ),
             ),
           ],
-      ) 
-      : 
-      Column(
-        children: <Widget>[
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text("Nombre(s): ",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Colors.black54
-                  ),
-                ),
-                Text("${registerBloc.nombres.value.toUpperCase()}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Colors.black54
-                  ),
-                ),
-              ],
-            ),
-          ),
-           Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text("Apellidos: ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.black54
-                    ),
-                  ),
-                  Text("${registerBloc.primerApellido.value.toUpperCase()} ${registerBloc.segundoApellido.value.toUpperCase()}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.black54
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text("Correo: ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.black54
-                    ),
-                  ),
-                  Text("${registerBloc.correo.value.toUpperCase()}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.black54
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text("Número: ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.black54
-                    ),
-                  ),
-                  Text("${registerBloc.celular.value.toUpperCase()}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.black54
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      );
+        ),
+      ),
+    );
   }
-
-
 }
