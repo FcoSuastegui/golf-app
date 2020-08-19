@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: "Club De Golf",
+      defaultTransition: Transition.cupertino,
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       getPages: Routes.routes,

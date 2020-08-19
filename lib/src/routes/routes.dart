@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:clubgolf/src/pages/principal/principal_page.dart';
+import 'package:clubgolf/src/pages/principal_page.dart';
 import 'package:clubgolf/src/pages/login_page.dart';
 
 class Routes {
@@ -15,6 +15,7 @@ class Routes {
     GetPage(
       name: PrincipalPage.routeName,
       page: () => PrincipalPage(),
+      transition: Transition.cupertino
     ),
   ];
 }

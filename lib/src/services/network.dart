@@ -2,8 +2,17 @@ import 'package:dio/dio.dart';
 
 class Network {
 
-  static String _urlBase = 'https://qa.timeshareapp.com/api';
+  Network._internal();
+  static Network _instance = Network._internal();
+  static Network get instance => _instance;
+
+  String _servidor = 'https://qa.timeshareapp.com';
+  String _api = "api/app/club-golf";
+  
+  final Dio _dio = Dio();
   // Servicios 
-  static postFormData(String route, Map data) async => await Dio().post("$_urlBase/$route", data: FormData.fromMap(data));
+  postFormData({ String route, Map<String, dynamic> data }) async => await _dio.post("$_servidor/$_api/$route", data: FormData.fromMap(data) );
+  post({ String route, Map<String, dynamic> data }) async => await _dio.post("$_servidor/$_api/$route", data: data );
+  get(String route) async => await _dio.get("$_servidor/$_api/$route");
   
 }

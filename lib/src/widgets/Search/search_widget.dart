@@ -1,3 +1,4 @@
+import 'package:clubgolf/src/controllers/search_input_controller.dart';
 import 'package:clubgolf/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -14,12 +15,15 @@ class SearchBarWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.grey, width: 0.3),
-        borderRadius: BorderRadius.all( Radius.circular(10.0))
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
       ),
       child: Row(
         children: <Widget>[
           Expanded(
             child: TextField(
+              onChanged: SearchInputController.instance.searchClub,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: hintText ?? 'Buscar',
@@ -28,7 +32,11 @@ class SearchBarWidget extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.only(left: 0.5),
-            child: Icon(Icons.search,size: 20.0, color: CustomColors.iconColor)
+            child: Icon(
+              Icons.search,
+              size: 20.0,
+              color: CustomColors.iconColor,
+            ),
           ),
         ],
       ),

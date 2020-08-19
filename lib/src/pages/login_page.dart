@@ -5,20 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:clubgolf/src/blocs/login_bloc.dart';
 import 'package:clubgolf/src/helpers/colors.dart';
 import 'package:clubgolf/src/pages/register_page.dart';
-import 'package:clubgolf/src/widgets/Alerts/custom_alert.dart';
 import 'package:clubgolf/src/widgets/Animation/fade_animation.dart';
 import 'package:clubgolf/src/widgets/Loading/loading.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' as getx;
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   static final routeName = '/';
-
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,30 +71,16 @@ class _LoginPageState extends State<LoginPage> {
                             LoadingDialog.show(context),
                         onSuccess: (context, state) async {
                           LoadingDialog.hide(context);
-                          Get.offAllNamed('/home');
-                          /* //login.close();
-                        await showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (BuildContext context) {
-                            return CustomAlert(
-                              type:  AlertDialogType.SUCCESS,
-                              text: state.successResponse,
-                            );
-                          },
-                        ); */
+                          getx.Get.offAllNamed('/home');
+                          login.close();
                         },
                         onFailure: (context, state) async {
                           LoadingDialog.hide(context);
-                          await showDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (BuildContext context) {
-                              return CustomAlert(
-                                type: AlertDialogType.ERROR,
-                                text: state.failureResponse,
-                              );
-                            },
+                          getx.Get.snackbar(
+                            "Error",
+                            state.failureResponse,
+                            colorText: Colors.white,
+                            backgroundColor: Colors.red.withOpacity(0.8),
                           );
                         },
                         child: Padding(
@@ -133,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       TextInputFieldBloc(
                                         textFieldBloc: login.password,
-                                        labelText: "Correo electrónico",
+                                        labelText: "Contraseña",
                                         suffixButton: SuffixButton.obscureText,
                                         textInputAction: TextInputAction.done,
                                         onSubmitted: (_) =>
@@ -174,8 +153,10 @@ class _LoginPageState extends State<LoginPage> {
                               FooterLogo(
                                 textPrincipal: '¿Aún no tienes cuenta?',
                                 textSecondary: '¡Registrate!',
-                                router: () =>
-                                    Get.to(RegisterPage(), opaque: true),
+                                router: () => getx.Get.to(
+                                  RegisterPage(),
+                                  opaque: true,
+                                ),
                               )
                             ],
                           ),
