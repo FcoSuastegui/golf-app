@@ -1,6 +1,7 @@
 import 'package:clubgolf/src/controllers/search_input_controller.dart';
 import 'package:clubgolf/src/helpers/colors.dart';
 import 'package:clubgolf/src/models/campos_model.dart';
+import 'package:clubgolf/src/pages/campo/campo_page.dart';
 import 'package:clubgolf/src/widgets/Search/search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -65,15 +66,14 @@ class PrincipalPage extends StatelessWidget {
                     () => Container(
                       margin: EdgeInsets.only(left: 15.0),
                       width: MediaQuery.of(context).size.width,
-                      child: _searchController.loading.value
+                      child: _.loading.value
                           ? Center(child: CircularProgressIndicator())
-                          : _searchController.campos.value.length > 0
+                          : _.campos.value.length > 0
                               ? Column(
                                   children: List.generate(
-                                    _searchController.campos.value.length,
-                                    (index) => _campos(
-                                        _searchController.campos[index],
-                                        context),
+                                    _.campos.value.length,
+                                    (index) =>
+                                        _campos(_.campos[index], context),
                                   ),
                                 )
                               : Text(
@@ -93,7 +93,11 @@ class PrincipalPage extends StatelessWidget {
   Widget _campos(CamposModel campos, BuildContext context) {
     return Container(
       child: GestureDetector(
-        onTap: () => {},
+        onTap: () => Get.to(
+          CampoPage(
+            campo: campos,
+          ),
+        ),
         child: Container(
           margin: EdgeInsets.only(right: 15.0, top: 0.0, bottom: 10.0),
           width: MediaQuery.of(context).size.width,
@@ -162,7 +166,6 @@ class PrincipalPage extends StatelessWidget {
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 17,
-                                  fontFamily: 'Oswald',
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),

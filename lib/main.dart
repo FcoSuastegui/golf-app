@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: "Club De Golf",
       defaultTransition: Transition.cupertino,
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/home',
       getPages: Routes.routes,
       theme: ThemeData(
         textTheme: GoogleFonts.quicksandTextTheme(),
