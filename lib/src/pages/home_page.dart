@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
               selectedItemBackgroundColor: CustomColors.iconColor,
               selectedItemIconColor: Colors.white,
               selectedItemLabelColor: Colors.black,
-              showSelectedItemShadow: true,
+              showSelectedItemShadow: false,
             ),
             selectedIndex: _.indexHome.value,
             onSelectTab: _.selectIndexHome,

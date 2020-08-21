@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:clubgolf/src/blocs/register_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:clubgolf/src/widgets/TextInput/text_input_field_bloc.dart';
+import 'package:clubgolf/src/widgets/Fields/text_input_field_bloc.dart';
 import 'package:clubgolf/src/helpers/formatters.dart';
 import 'package:clubgolf/src/widgets/Buttons/button_submit.dart';
 import 'package:clubgolf/src/widgets/Footers/footer_logo.dart';
