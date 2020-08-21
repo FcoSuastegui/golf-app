@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class InvitadosPage extends StatelessWidget {
-  const InvitadosPage({Key key}) : super(key: key);
+class InvitadoScreen extends StatelessWidget {
+  const InvitadoScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -4,11 +4,11 @@ import 'package:clubgolf/src/services/network.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 
-class SearchInputController extends GetxController {
+class HomeController extends GetxController {
   // Patron Singleton
-  SearchInputController._internal();
-  static SearchInputController _instance = SearchInputController._internal();
-  static SearchInputController get instance => _instance;
+  HomeController._internal();
+  static HomeController _instance = HomeController._internal();
+  static HomeController get instance => _instance;
 
   RxList<CamposModel> _campos = List<CamposModel>().obs;
   RxList get campos => _campos;
@@ -16,11 +16,18 @@ class SearchInputController extends GetxController {
   RxBool _loading = false.obs;
   RxBool get loading => _loading;
 
+  CamposModel _campoSeleccionado;
+  CamposModel get campoSeleccionado => _campoSeleccionado;
+
+
+
   @override
   void onInit() {
     super.onInit();
     _camposApi('');
   }
+
+  void seleccionarCampo(CamposModel campo ) => _campoSeleccionado = campo;
 
   void searchClub(String text) {
     Debouncer.instance.run(() async {

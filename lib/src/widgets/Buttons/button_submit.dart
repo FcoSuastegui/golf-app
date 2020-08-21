@@ -1,12 +1,12 @@
 import 'package:clubgolf/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
-class ButtonSubmitBloc extends StatelessWidget {
+class ButtonSubmit extends StatelessWidget {
   final Function submit;
   final String text;
   final Color color, textColor;
 
-  ButtonSubmitBloc({
+  ButtonSubmit({
     Key key,
     @required this.submit,
     @required this.text,

@@ -1,69 +1,67 @@
-import 'package:clubgolf/src/controllers/search_input_controller.dart';
-import 'package:clubgolf/src/helpers/colors.dart';
-import 'package:clubgolf/src/models/campos_model.dart';
-import 'package:clubgolf/src/pages/campo/campo_page.dart';
-import 'package:clubgolf/src/widgets/Search/search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:clubgolf/src/controllers/home_controller.dart';
+import 'package:clubgolf/src/helpers/colors.dart';
+import 'package:clubgolf/src/models/campos_model.dart';
+import 'package:clubgolf/src/pages/campo_page.dart';
+import 'package:clubgolf/src/widgets/Search/search_widget.dart';
 
-class PrincipalPage extends StatelessWidget {
-  static final routeName = '/home';
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _searchController = SearchInputController.instance;
-
     return Scaffold(
       backgroundColor: Colors.white,
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(top: 0.0),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.32,
-                        width: MediaQuery.of(context).size.width,
+      body: GetBuilder<HomeController>(
+        init: HomeController.instance,
+        builder: (_) => GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(top: 0.0),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.32,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage("assets/images/golf-3.jpg"),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        width: double.infinity,
                         decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage("assets/images/golf-3.jpg"),
-                            fit: BoxFit.cover,
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            colors: [Colors.teal[800], Colors.teal[200]],
                           ),
                         ),
                       ),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          colors: [Colors.teal[800], Colors.teal[200]],
-                        ),
+                      SearchBarWidget(
+                        hintText: "Buscar campos..",
+                        onChanged: _.searchClub,
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(15.0),
+                    child: Text(
+                      "Campos",
+                      style: TextStyle(
+                        color: CustomColors.primaryColor,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SearchBarWidget(
-                      hintText: "Buscar campos..",
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.all(15.0),
-                  child: Text(
-                    "Campos",
-                    style: TextStyle(
-                      color: CustomColors.primaryColor,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
                   ),
-                ),
-                GetBuilder(
-                  init: _searchController,
-                  builder: (_) => Obx(
-                    () => Container(
+                  Obx(() {
+                    return Container(
                       margin: EdgeInsets.only(left: 15.0),
                       width: MediaQuery.of(context).size.width,
                       child: _.loading.value
@@ -79,10 +77,10 @@ class PrincipalPage extends StatelessWidget {
                               : Text(
                                   "No se encontro campos",
                                 ),
-                    ),
-                  ),
-                )
-              ],
+                    );
+                  }),
+                ],
+              ),
             ),
           ),
         ),
@@ -93,11 +91,12 @@ class PrincipalPage extends StatelessWidget {
   Widget _campos(CamposModel campos, BuildContext context) {
     return Container(
       child: GestureDetector(
-        onTap: () => Get.to(
-          CampoPage(
-            campo: campos,
-          ),
-        ),
+        onTap: () {
+          Get.find<HomeController>().seleccionarCampo(campos);
+          Get.to(
+            CampoPage(),
+          );
+        },
         child: Container(
           margin: EdgeInsets.only(right: 15.0, top: 0.0, bottom: 10.0),
           width: MediaQuery.of(context).size.width,

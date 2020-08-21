@@ -10,6 +10,8 @@ class CamposModel {
     this.enterprise,
     this.ubication,
     this.stars,
+    this.description,
+    this.regulation,
   });
 
   List<String> images;
@@ -17,20 +19,26 @@ class CamposModel {
   String enterprise;
   String ubication;
   int stars;
+  String description;
+  String regulation;
 
   factory CamposModel.fromJson(Map<String, dynamic> json) => CamposModel(
-    images      : List<String>.from(json["images"].map((x) => x)),
-    field       : json["field"],
-    enterprise  : json["enterprise"],
-    ubication   : json["ubication"],
-    stars       : json["stars"],
+    images        : List<String>.from(json["images"].map((x) => x)),
+    field         : json["field"],
+    enterprise    : json["enterprise"],
+    ubication     : json["ubication"],
+    stars         : json["stars"],
+    description   : json["description"],
+    regulation    : json["regulation"],
   );
 
   Map<String, dynamic> toJson() => {
-    "images"      : List<dynamic>.from(images.map((x) => x)),
-    "field"       : field,
-    "enterprise"  : enterprise,
-    "ubication"   : ubication,
-    "stars"       : stars,
+    "images"        : List<dynamic>.from(images.map((x) => x)),
+    "field"         : field,
+    "enterprise"    : enterprise,
+    "ubication"     : ubication,
+    "stars"         : stars,
+    "description"   : description,
+    "regulation"    : regulation,
   };
 }

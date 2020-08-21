@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ScoreCardPage extends StatelessWidget {
-  const ScoreCardPage({Key key}) : super(key: key);
+class ReservacionScreen extends StatelessWidget {
+  const ReservacionScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

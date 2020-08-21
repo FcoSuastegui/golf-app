@@ -1,10 +1,10 @@
-import 'package:clubgolf/src/controllers/search_input_controller.dart';
 import 'package:clubgolf/src/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
 class SearchBarWidget extends StatelessWidget {
   final String hintText;
-  SearchBarWidget({@required this.hintText});
+  final ValueChanged<String> onChanged;
+  SearchBarWidget({@required this.hintText, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class SearchBarWidget extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: TextField(
-              onChanged: SearchInputController.instance.searchClub,
+              onChanged: onChanged,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: hintText ?? 'Buscar',

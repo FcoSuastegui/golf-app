@@ -16,7 +16,7 @@ class ClubController extends GetxController{
     ),
     ItemModel(
       title: "Hoyos",
-      icon: "golf_course",
+      icon: "golf_course",  
       page: "hoyos"
     ),
   ].obs;

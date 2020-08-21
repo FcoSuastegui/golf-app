@@ -1,4 +1,4 @@
-import 'package:clubgolf/src/widgets/Buttons/button_submit_bloc.dart';
+import 'package:clubgolf/src/widgets/Buttons/button_submit.dart';
 import 'package:clubgolf/src/widgets/Footers/footer_logo.dart';
 import 'package:clubgolf/src/widgets/TextInput/text_input_field_bloc.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +142,7 @@ class LoginPage extends StatelessWidget {
                               ),
                               FadeAnimation(
                                 1.6,
-                                ButtonSubmitBloc(
+                                ButtonSubmit(
                                   submit: login.submit,
                                   text: "ENTRAR",
                                 ),

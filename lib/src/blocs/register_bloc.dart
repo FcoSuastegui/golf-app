@@ -1,4 +1,6 @@
 import 'package:clubgolf/src/blocs/validators/validators.dart';
+import 'package:clubgolf/src/services/network.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 
 class RegisterBloc extends FormBloc<String, String> {
@@ -29,5 +31,35 @@ class RegisterBloc extends FormBloc<String, String> {
   }
 
   @override
-  void onSubmitting() {}
+  void onSubmitting() async {
+
+    final response = await register({
+      "nombre" : nombre.value,
+      "primerApellido" : primerAp.value,
+      "segundoApellido" : segundoAp.value,
+      "correo" : correo.value,
+      "numero" : numero.value 
+    });
+
+    if( response['status'] ){
+      emitSuccess( successResponse: 'Ok' );
+    } else {
+      emitFailure( failureResponse: 'Error' );
+    }
+
+
+  }
+
+  Future<Map<String, dynamic>> register(Map<String, dynamic> data ) async {
+    final Response response = await Network.instance.post(route: 'register', data: data);
+    
+    Map<String, dynamic> respuesta  = { 'status':  false };
+    if ( response.statusCode == 200 ) {
+      print(response.data);
+    }
+
+    return respuesta;
+
+  }
+
 }

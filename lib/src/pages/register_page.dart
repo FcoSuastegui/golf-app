@@ -1,12 +1,12 @@
-import 'package:clubgolf/src/blocs/register_bloc.dart';
-import 'package:clubgolf/src/helpers/formatters.dart';
-import 'package:clubgolf/src/widgets/Buttons/button_submit_bloc.dart';
-import 'package:clubgolf/src/widgets/Footers/footer_logo.dart';
-import 'package:clubgolf/src/widgets/TextInput/text_input_field_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:clubgolf/src/blocs/register_bloc.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:clubgolf/src/widgets/TextInput/text_input_field_bloc.dart';
+import 'package:clubgolf/src/helpers/formatters.dart';
+import 'package:clubgolf/src/widgets/Buttons/button_submit.dart';
+import 'package:clubgolf/src/widgets/Footers/footer_logo.dart';
+import 'package:clubgolf/src/widgets/Loading/loading.dart';
 
 class RegisterPage extends StatelessWidget {
   static final routeName = 'register';
@@ -69,10 +69,12 @@ class RegisterPage extends StatelessWidget {
                             final register = context.bloc<RegisterBloc>();
                             return FormBlocListener<RegisterBloc, String,
                                 String>(
-                              onSubmitting: (context, state) {},
-                              onSuccess: (context, state) {},
+                              onSubmitting: (context, state) => LoadingDialog.show(context),
+                              onSuccess: (context, state) {
+                                LoadingDialog.hide(context);
+                              },
                               onFailure: (context, state) {
-                                register?.close();
+                                LoadingDialog.hide(context);
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -81,7 +83,6 @@ class RegisterPage extends StatelessWidget {
                                     alignment: Alignment.center,
                                     child: Text(
                                       "CREA UNA NUEVA CUENTA",
-                                      style: GoogleFonts.quicksand(),
                                     ),
                                   ),
                                   SizedBox(
@@ -139,7 +140,7 @@ class RegisterPage extends StatelessWidget {
                                   SizedBox(
                                     height: 30.0,
                                   ),
-                                  ButtonSubmitBloc(
+                                  ButtonSubmit(
                                     submit: register.submit,
                                     text: "ACEPTAR",
                                   ),

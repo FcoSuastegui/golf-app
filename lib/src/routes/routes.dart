@@ -1,15 +1,24 @@
+import 'package:clubgolf/src/pages/configuracion/configuracion_page.dart';
+import 'package:clubgolf/src/pages/notificacion/notificacion_page.dart';
+import 'package:clubgolf/src/pages/servicios/servicios_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:clubgolf/src/pages/principal_page.dart';
+// Rutas con nombres
+import 'package:clubgolf/src/pages/home_page.dart';
 import 'package:clubgolf/src/pages/login_page.dart';
 
-import 'package:clubgolf/src/pages/hoyos/hoyos_page.dart';
-import 'package:clubgolf/src/pages/informacion/informacion_page.dart';
-import 'package:clubgolf/src/pages/invitados/invitados_page.dart';
-import 'package:clubgolf/src/pages/reservaciones/reservaciones_page.dart';
-import 'package:clubgolf/src/pages/score-card/score_card_page.dart';
-import 'package:clubgolf/src/pages/tee-time/teetime_page.dart';
+// Rutas dinamicas con navigation bar
+import 'package:clubgolf/src/pages/home/home_screen.dart';
+import 'package:clubgolf/src/pages/campo/campo_screen.dart';
+
+// Rutas push
+import 'package:clubgolf/src/pages/campo/hoyos/hoyos_screen.dart';
+import 'package:clubgolf/src/pages/campo/informacion/informacion_screen.dart';
+import 'package:clubgolf/src/pages/campo/invitados/invitados_screen.dart';
+import 'package:clubgolf/src/pages/campo/reservaciones/reservaciones_screen.dart';
+import 'package:clubgolf/src/pages/campo/score-card/score_card_screen.dart';
+import 'package:clubgolf/src/pages/campo/tee-time/teetime_screen.dart';
 
 class Routes {
   static final Routes _instancia = new Routes._internal();
@@ -22,20 +31,20 @@ class Routes {
       page: () => LoginPage(),
     ),
     GetPage(
-      name: PrincipalPage.routeName,
-      page: () => PrincipalPage(),
+      name: HomePage.routeName,
+      page: () => HomePage(),
       transition: Transition.cupertino,
     ),
   ];
 
-  static getRoute(String route, {bool isTo = true, bool isNamed = false}) {
+  static getRoute(String route ) {
     Map<String, dynamic> page = {
-      'invitados': InvitadosPage(),
-      'reservaciones': ReservacionesPage(),
-      'score-card': ScoreCardPage(),
-      'tee-time': TeeTimePage(),
-      'informacion': InformacionPage(),
-      'hoyos': HoyosPage(),
+      'invitados': InvitadoScreen(),
+      'reservaciones': ReservacionScreen(),
+      'score-card': ScoreCardScreen(),
+      'tee-time': TeeTimeScreen(),
+      'informacion': InformacionScreen(),
+      'hoyos': HoyoScreen(),
     };
     page[route] == null
         ? Get.snackbar(
@@ -44,5 +53,28 @@ class Routes {
             backgroundColor: Colors.red.withOpacity(0.8),
           )
         : Get.to(page[route]);
+  }
+
+  static Widget campoRoute(int index) {
+    List<Widget> list = [
+      CampoScreen(),
+      ServiciosPage(),
+      NotificacionPage(),
+      ConfiguracionPage(),
+    ];
+    
+    int indexAux = index + 1;
+    return list.length >= indexAux ? list[index] : CampoScreen();
+
+  }
+
+  static Widget homeRoute(int index) {
+    List<Widget> list = [
+      HomeScreen(),
+      NotificacionPage(),
+      ConfiguracionPage(),
+    ];
+    int indexAux = index + 1;
+    return list.length >= indexAux ? list[index] : HomeScreen();
   }
 }

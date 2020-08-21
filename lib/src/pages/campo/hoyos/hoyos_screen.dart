@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TeeTimePage extends StatelessWidget {
-  const TeeTimePage({Key key}) : super(key: key);
+class HoyoScreen extends StatelessWidget {
+  const HoyoScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
