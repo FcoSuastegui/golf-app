@@ -36,7 +36,7 @@ class CardCustomWidget extends StatelessWidget {
             ),
           ),
           child: Container(
-            height: height ?? MediaQuery.of(context).size.height * 0.10,
+            height: height ?? MediaQuery.of(context).size.height * 0.15,
             margin: EdgeInsets.fromLTRB(left, top, right, buttom),
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(

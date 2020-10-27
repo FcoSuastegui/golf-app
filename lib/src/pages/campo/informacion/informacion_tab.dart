@@ -73,9 +73,9 @@ class InformacionTab extends StatelessWidget {
                     child: Container(
                       margin: EdgeInsets.only(top: 10.0),
                       child: Obx(() {
-                        return _.secondText == ""
+                        return _.secondText.value == ""
                             ? Text(
-                                _.firstText,
+                                _.firstText.value,
                                 textAlign: TextAlign.justify,
                                 style: TextStyle(
                                   color: Colors.black.withOpacity(0.7),
@@ -88,9 +88,8 @@ class InformacionTab extends StatelessWidget {
                                 text: TextSpan(
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: !_.leerMas.value
-                                          ? _.firstText + "..."
-                                          : _.firstText + _.secondText,
+                                      text: !_.leerMas.value 
+                                          ? _.firstText.value : _.firstText.value + _.secondText.value,
                                       style: TextStyle(
                                         color: Colors.black.withOpacity(0.7),
                                         fontSize: 13,

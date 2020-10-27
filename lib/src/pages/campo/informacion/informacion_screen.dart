@@ -10,79 +10,63 @@ class InformacionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
-        ),
-        title: Text(
-          "Información",
-          style: GoogleFonts.quicksand(
-            color: Colors.black
+    return DefaultTabController(
+      length: 2,
+      initialIndex: 0,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          elevation: 0.0,
+          title: Text(
+            "Infomación",
+            style: GoogleFonts.quicksand(
+              fontWeight: FontWeight.w400,
+              fontSize: 18.0,
+            ),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: Get.back,
           ),
         ),
-      ),
-      body: DefaultTabController(
-        length: 2,
-        child: SafeArea(
-            child: Column(
-          children: <Widget>[
-            Container(
-              child: Material(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.all(0.0),
-                  margin: EdgeInsets.only(
-                      left: 10.0, right: 10.0, top: 5.0, bottom: 20.0),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFF6F6F6),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 3.0,
-                        color: Colors.black.withOpacity(0.3),
-                      ),
-                    ],
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15.0),
-                    ),
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              TabBar(
+                labelStyle: GoogleFonts.quicksand(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.0,
+                ),
+                tabs: [
+                  Tab(
+                    text: "General",
                   ),
-                  child: TabBar(
-                    labelStyle: GoogleFonts.quicksand(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                    ),
-                    tabs: [
-                      Tab(
-                        text: "Información",
-                      ),
-                      Tab(
-                        text: "Reglamento",
-                      ),
-                    ],
-                    indicatorColor: Colors.transparent,
-                    unselectedLabelColor: Colors.black45,
-                    unselectedLabelStyle: GoogleFonts.quicksand(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 14,
-                    ),
-                    labelColor: CustomColors.primaryColor,
+                  Tab(
+                    text: "Reglamento",
                   ),
+                ],
+                indicatorColor: CustomColors.primaryColor,
+                unselectedLabelColor: Colors.black87,
+                unselectedLabelStyle: GoogleFonts.quicksand(
+                  fontWeight: FontWeight.w300,
+                  fontSize: 16.0,
+                ),
+                labelColor: CustomColors.primaryColor,
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    InformacionTab(),
+                    ReglamentoTab(),
+                  ],
                 ),
               ),
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  InformacionTab(),
-                  ReglamentoTab(),
-                ],
-              ),
-            ),
-          ],
-        )),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -16,5 +16,7 @@ class CustomColors {
 
   static Color buttonColor                  = Colors.teal[200];
 
+  static List<Color> appBarColor = [Colors.teal[900], Colors.teal[800], Colors.teal[400]];
+
 
 }

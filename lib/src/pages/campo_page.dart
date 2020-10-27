@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:clubgolf/src/helpers/colors.dart';
 import 'package:clubgolf/src/routes/routes.dart';
 import 'package:clubgolf/src/widgets/NavigationBar/navigation_bar.dart';
@@ -9,44 +10,66 @@ class CampoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<NavigationBarController>(
-      init: NavigationBarController.instance,
-      builder: (_) => Obx(() {
-        return Scaffold(
-          resizeToAvoidBottomInset: true,
-          backgroundColor: Colors.white,
-          body: Routes.campoRoute(_.indexCampo.value),
-          bottomNavigationBar: NavigationBar(
-            theme: NavigationBarTheme(
-              barBackgroundColor: Colors.white,
-              selectedItemBorderColor: Colors.white,
-              selectedItemBackgroundColor: CustomColors.iconColor,
-              selectedItemIconColor: Colors.white,
-              selectedItemLabelColor: Colors.black,
-              showSelectedItemShadow: false,
+      init: NavigationBarController(),
+      builder: (_) => Obx(
+        () {
+          return WillPopScope(
+            onWillPop: () {
+              return Future.value(false);
+            },
+            child: Scaffold(
+              resizeToAvoidBottomInset: true,
+              backgroundColor: Colors.white,
+              body: Routes.inst.campoRoute(_.indexCampo.value),
+              bottomNavigationBar: NavigationBar(
+                theme: NavigationBarTheme(
+                  barBackgroundColor: Colors.white,
+                  selectedItemBorderColor: Colors.white,
+                  selectedItemBackgroundColor: CustomColors.primaryColor,
+                  selectedItemIconColor: Colors.white,
+                  selectedItemLabelColor: Colors.black,
+                  showSelectedItemShadow: false,
+                ),
+                selectedIndex: _.indexCampo.value,
+                onSelectTab: _.selectIndexCampo,
+                items: [
+                  NavigationBarItem(
+                    iconData: Icons.home,
+                    label: 'Inicio',
+                    itemWidth: 10,
+                  ),
+                  NavigationBarItem(
+                    iconData: Icons.style,
+                    label: 'Servicios',
+                    itemWidth: 10,
+                  ),
+                  NavigationBarItem(
+                    iconWidget: Badge(
+                      badgeContent: Text(
+                        '3',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      child: Icon(
+                        Icons.notifications,
+                        color: _.indexCampo.value == _.notificacionCampo
+                            ? Colors.white
+                            : Colors.grey,
+                      ),
+                    ),
+                    label: 'Notificaciones',
+                    itemWidth: 10,
+                  ),
+                  NavigationBarItem(
+                    iconData: Icons.settings,
+                    label: 'Configuración',
+                    itemWidth: 5,
+                  ),
+                ],
+              ),
             ),
-            selectedIndex: _.indexCampo.value,
-            onSelectTab: _.selectIndexCampo,
-            items: [
-              NavigationBarItem(
-                iconData: Icons.home,
-                label: 'Inicio',
-              ),
-              NavigationBarItem(
-                iconData: Icons.style,
-                label: 'Servicios',
-              ),
-              NavigationBarItem(
-                iconData: Icons.notifications,
-                label: 'Notificaciones',
-              ),
-              NavigationBarItem(
-                iconData: Icons.settings,
-                label: 'Configuración',
-              ),
-            ],
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 }

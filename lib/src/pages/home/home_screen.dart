@@ -10,12 +10,15 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: GetBuilder<HomeController>(
         init: HomeController.instance,
         builder: (_) => GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
             child: Container(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -26,8 +29,8 @@ class HomeScreen extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(top: 0.0),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.32,
-                          width: MediaQuery.of(context).size.width,
+                          height: Get.height * 0.32,
+                          width: Get.width,
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage("assets/images/golf-3.jpg"),
@@ -43,9 +46,14 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SearchBarWidget(
-                        hintText: "Buscar campos..",
-                        onChanged: _.searchClub,
+                      Positioned(
+                        top: Get.height * 0.06,
+                        left: 5.0,
+                        right: 5.0,
+                        child: SearchBarWidget(
+                          hintText: "Buscar campos..",
+                          onChanged: _.searchClub,
+                        ),
                       ),
                     ],
                   ),
@@ -60,16 +68,18 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Obx(() {
-                    return Container(
+                  Obx(
+                    () => Container(
                       margin: EdgeInsets.only(left: 15.0),
-                      width: MediaQuery.of(context).size.width,
+                      height: Get.height / 2,
+                      width: Get.width,
                       child: _.loading.value
                           ? Center(child: CircularProgressIndicator())
-                          : _.campos.value.length > 0
-                              ? Column(
+                          : _.campos.length > 0
+                              ? ListView(
+                                  shrinkWrap: false,
                                   children: List.generate(
-                                    _.campos.value.length,
+                                    _.campos.length,
                                     (index) =>
                                         _campos(_.campos[index], context),
                                   ),
@@ -77,8 +87,8 @@ class HomeScreen extends StatelessWidget {
                               : Text(
                                   "No se encontro campos",
                                 ),
-                    );
-                  }),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -95,11 +105,12 @@ class HomeScreen extends StatelessWidget {
           Get.find<HomeController>().seleccionarCampo(campos);
           Get.to(
             CampoPage(),
+            duration: Duration(milliseconds: 900) 
           );
         },
         child: Container(
           margin: EdgeInsets.only(right: 15.0, top: 0.0, bottom: 10.0),
-          width: MediaQuery.of(context).size.width,
+          width: Get.width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
               Radius.circular(15.0),
@@ -114,38 +125,41 @@ class HomeScreen extends StatelessWidget {
           ),
           child: Row(
             children: <Widget>[
-              Container(
-                height: 90,
-                width: 100,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(campos.images.first),
-                    fit: BoxFit.fitHeight,
+              Hero(
+                tag: campos.field,
+                child: Container(
+                  height: 90,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(campos.images.first),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15.0),
+                      bottomLeft: Radius.circular(15.0),
+                    ),
                   ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15.0),
-                    bottomLeft: Radius.circular(15.0),
-                  ),
-                ),
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      height: 90,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.15),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15.0),
-                          bottomLeft: Radius.circular(15.0),
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        height: 90,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.15),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15.0),
+                            bottomLeft: Radius.circular(15.0),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Expanded(
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: Get.width,
                   margin: EdgeInsets.only(left: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,8 +170,11 @@ class HomeScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                              margin:
-                                  EdgeInsets.only(top: 0, left: 0, bottom: 0),
+                              margin: EdgeInsets.only(
+                                top: 0,
+                                left: 0,
+                                bottom: 0,
+                              ),
                               child: Text(
                                 campos.field,
                                 maxLines: 1,
@@ -178,7 +195,10 @@ class HomeScreen extends StatelessWidget {
                           children: <Widget>[
                             Container(
                               margin: EdgeInsets.only(
-                                  top: 5.0, left: 0.0, bottom: 0.0),
+                                top: 5.0,
+                                left: 0.0,
+                                bottom: 0.0,
+                              ),
                               child: Text(
                                 campos.enterprise,
                                 maxLines: 1,
@@ -199,7 +219,10 @@ class HomeScreen extends StatelessWidget {
                           children: <Widget>[
                             Container(
                               margin: EdgeInsets.only(
-                                  top: 5.0, left: 0.0, bottom: 0.0),
+                                top: 5.0,
+                                left: 0.0,
+                                bottom: 0.0,
+                              ),
                               child: Text(
                                 campos.ubication,
                                 maxLines: 1,

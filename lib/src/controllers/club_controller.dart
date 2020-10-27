@@ -4,10 +4,6 @@ import 'package:get/get.dart';
 
 class ClubController extends GetxController{
 
-  ClubController._internal();
-  static ClubController _instance = ClubController._internal();
-  static ClubController get instance => _instance;
-
   RxList<ItemModel> _firtsItems = [
     ItemModel(
       title: "Informacion",
@@ -17,7 +13,7 @@ class ClubController extends GetxController{
     ItemModel(
       title: "Hoyos",
       icon: "golf_course",  
-      page: "hoyos"
+      page: "hoyoss"
     ),
   ].obs;
 
@@ -31,12 +27,12 @@ class ClubController extends GetxController{
       icon: "insert_invitation",
       page: "tee-time"
     ),
-    ItemModel(
+   /*  ItemModel(
       title: "Reservaciones",
       subtitle: "Historial de reservaciones",
       icon: "import_contacts",
       page: "reservaciones"
-    ),
+    ), */
     ItemModel(
       title: "Mis invitados",
       subtitle: "Lista de invitados",

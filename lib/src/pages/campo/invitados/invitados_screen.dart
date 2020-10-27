@@ -1,3 +1,4 @@
+import 'package:clubgolf/src/widgets/Scaffold/scaffold_template_widget.dart';
 import 'package:flutter/material.dart';
 
 class InvitadoScreen extends StatelessWidget {
@@ -5,7 +6,7 @@ class InvitadoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldTemplateWidget(
       body: Center(
         child: Text("Center")
       ),

@@ -1,18 +1,20 @@
+import 'package:clubgolf/src/helpers/get_storages.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 class Network {
-
   Network._internal();
   static Network _instance = Network._internal();
   static Network get instance => _instance;
 
-  String _servidor = 'https://qa.timeshareapp.com';
-  String _api = "api/app/club-golf";
-  
-  final Dio _dio = Dio();
-  // Servicios 
-  postFormData({ String route, Map<String, dynamic> data }) async => await _dio.post("$_servidor/$_api/$route", data: FormData.fromMap(data) );
-  post({ String route, Map<String, dynamic> data }) async => await _dio.post("$_servidor/$_api/$route", data: data );
-  get(String route) async => await _dio.get("$_servidor/$_api/$route");
+  Dio _dio = new Dio(BaseOptions(
+    baseUrl: "${GetStorages.inst.api}",
+    connectTimeout: 5000,
+    receiveTimeout: 3000,
+  ));
+  // Servicios
+  postFormData({String route, Map<String, dynamic> data}) async => await _dio.post("/$route", data: FormData.fromMap(data));
+  post({@required String route, Map<String, dynamic> data}) async => await _dio.post("/$route", data: data);
+  get(String route) async => await _dio.get("/$route");
   
 }

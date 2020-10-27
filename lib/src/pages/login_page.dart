@@ -18,6 +18,7 @@ class LoginPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: () => FocusScope.of(context).unfocus(),
           child: Container(
             color: Colors.transparent,

@@ -6,6 +6,7 @@ import 'navigation_bar_theme.dart';
 class NavigationBarItem extends StatelessWidget {
   final String label;
   final IconData iconData;
+  final Widget iconWidget;
   final Duration animationDuration;
   Color selectedBackgroundColor;
   Color selectedForegroundColor;
@@ -44,6 +45,7 @@ class NavigationBarItem extends StatelessWidget {
     this.selectedLabelColor,
     this.iconData,
     this.animationDuration = kDefaultAnimationDuration,
+    this.iconWidget,
   }) : super(key: key);
 
   Center _makeLabel(String label) {
@@ -68,7 +70,7 @@ class NavigationBarItem extends StatelessWidget {
     );
   }
 
-  Widget _makeIconArea(double itemWidth, IconData iconData) {
+  Widget _makeIconArea(double itemWidth, Widget iconWidget ) {
     bool isSelected = _isItemSelected();
     double radius = itemWidth / 2;
     double innerBoxSize = itemWidth - 8;
@@ -85,7 +87,7 @@ class NavigationBarItem extends StatelessWidget {
           backgroundColor: isSelected
               ? selectedBackgroundColor ?? theme.selectedItemBackgroundColor
               : theme.unselectedItemBackgroundColor,
-          child: _makeIcon(iconData),
+          child: iconWidget,
         ),
       ),
     );
@@ -142,7 +144,8 @@ class NavigationBarItem extends StatelessWidget {
     double shadowTopSpacer = 4;
 
     Widget labelWidget = _makeLabel(label);
-    Widget iconAreaWidget = _makeIconArea(itemWidth, iconData);
+    Widget _iconWidget = iconData != null ? _makeIcon(iconData) : iconWidget; 
+    Widget iconAreaWidget = _makeIconArea(itemWidth,  _iconWidget);
     Widget shadowWidget = showSelectedItemShadow ? _makeShadow() : Container();
 
     return AnimatedContainer(

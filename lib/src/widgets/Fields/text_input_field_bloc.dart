@@ -31,7 +31,7 @@ class TextInputFieldBloc extends StatelessWidget {
     return TextFieldBlocBuilder(
       textInputAction: textInputAction,
       textFieldBloc: textFieldBloc,
-      onSubmitted: onSubmitted,
+      onSubmitted: onSubmitted ?? (_) =>  FocusScope.of(context).nextFocus(),
       keyboardType: keyboardType,
       suffixButton: suffixButton,
       inputFormatters: inputFormatters,
